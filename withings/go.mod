@@ -1,6 +1,6 @@
-module github.com/artoo-git/withings-go/withings
+module github.com/tgrangeray/withings-go/withings
 
-go 1.15
+go 1.21
 
 require (
 	github.com/pkg/errors v0.9.1

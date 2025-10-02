@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/artoo-git/withings-go/withings"
+	"github.com/tgrangeray/withings-go/withings"
 )
 
 const (
@@ -102,7 +102,8 @@ func printMeas(v withings.MeasureData, name, unit string) {
 func testGetmeas() {
 
 	fmt.Println("========== Getmeas[START] ========== ")
-	mym, err := client.GetMeas(withings.Real, adayago, t, lastupdate, 0, false, true, withings.Weight, withings.Height, withings.FatFreeMass, withings.BoneMass, withings.FatRatio, withings.FatMassWeight, withings.Temp, withings.HeartPulse, withings.Hydration)
+	// mym, err := client.GetMeas(withings.Real, adayago, t, lastupdate, 0, false, true, withings.Weight, withings.Height, withings.FatFreeMass, withings.BoneMass, withings.FatRatio, withings.FatMassWeight, withings.Temp, withings.HeartPulse, withings.Hydration, withings.DiastolicBP, withings.SystolicBP)
+	mym, err := client.GetMeas(withings.Real, adayago, t, lastupdate, 0, false, true, withings.DiastolicBP, withings.SystolicBP)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -216,7 +217,7 @@ func testGetsleep() {
 func testGetsleepsummary() {
 	fmt.Println("========== Getsleepsummary[START] ========== ")
 
-	slpsum, err := client.GetSleepSummary(sd, ed, 0, withings.SSBdi, withings.SSDsd, withings.SSD2s, withings.SSD2w, withings.SSHrAvr, withings.SSHrMax, withings.SSHrMin, withings.SSLsd, withings.SSRsd, withings.SSRRAvr, withings.SSRRMax, withings.SSRRMin, withings.SSSS,
+	slpsum, err := client.GetSleepSummary(sd, ed, 0, withings.SSBdi, withings.SSDsd, withings.SSD2s, withings.SSD2w, withings.SSHrAvr, withings.SSHrMax, withings.SSHrMin, withings.SSDsli, withings.SSRsdur, withings.SSRRAvr, withings.SSRRMax, withings.SSRRMin, withings.SSSS,
 		withings.SSSng, withings.SSSngEC, withings.SSWupC, withings.SSWupD)
 
 	if err != nil {

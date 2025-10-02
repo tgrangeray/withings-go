@@ -60,20 +60,20 @@ const (
 	BoneMass      MeasType = 88  // Bone Mass (kg)
 	PWaveVel      MeasType = 91  // Pulse Wave Velocity (m/s)
 	VO2           MeasType = 123 // VO2 max is a numerical measurement of your body’s ability to consume oxygen (ml/min/kg).
-	AtrFib		  MeasType = 130	// Atrial fibrillation result
-	QRS_ECG       MeasType = 135	// QRS interval duration based on ECG signal
-    PR__ECG		  MeasType = 136	// PR interval duration based on ECG signal
-    QT__ECG		  MeasType = 137	// QT interval duration based on ECG signal
-    CorQT_ECG	  MeasType = 138	// Corrected QT interval duration based on ECG signal
-    AtrFibPPG	  MeasType = 139	// Atrial fibrillation result from PPG
-    VasAge		  MeasType = 155	// Vascular age
-    NervHea		  MeasType = 167	// Nerve Health Score Conductance 2 electrodes Feet
-    ExtrH2o		  MeasType = 168	// Extracellular Water in kg
-    IntrH2o		  MeasType = 169	// Intracellular Water in kg
-    VisFat		  MeasType = 170	// Visceral Fat (without unity)
-    FatMassSeg 	  MeasType = 174	// Fat Mass for segments in mass unit
-    MusMassSeg	  MeasType = 175	// Muscle Mass for segments
-    EDAfeet		  MeasType = 196	// Electrodermal activity feet
+	AtrFib        MeasType = 130 // Atrial fibrillation result
+	QRS_ECG       MeasType = 135 // QRS interval duration based on ECG signal
+	PR__ECG       MeasType = 136 // PR interval duration based on ECG signal
+	QT__ECG       MeasType = 137 // QT interval duration based on ECG signal
+	CorQT_ECG     MeasType = 138 // Corrected QT interval duration based on ECG signal
+	AtrFibPPG     MeasType = 139 // Atrial fibrillation result from PPG
+	VasAge        MeasType = 155 // Vascular age
+	NervHea       MeasType = 167 // Nerve Health Score Conductance 2 electrodes Feet
+	ExtrH2o       MeasType = 168 // Extracellular Water in kg
+	IntrH2o       MeasType = 169 // Intracellular Water in kg
+	VisFat        MeasType = 170 // Visceral Fat (without unity)
+	FatMassSeg    MeasType = 174 // Fat Mass for segments in mass unit
+	MusMassSeg    MeasType = 175 // Muscle Mass for segments
+	EDAfeet       MeasType = 196 // Electrodermal activity feet
 
 )
 
@@ -91,15 +91,15 @@ type IntraDayActType string
 
 // Intraday Activity Type
 const (
-	StepsIntra     ActivityType = "steps"         // Number of steps
-	ElevIntra      ActivityType = "elevation"     // Number of floors cliembed.
-	CaloriesIntra  ActivityType = "calories"      // Active calories burned (in Kcal).
-	DistanceIntra  ActivityType = "distance"      // Distance travelled (in meters).
-	StrokeIntra    ActivityType = "stroke"        // Number of strokes performed.
-    PoolLapIntra   ActivityType = "pool_lap"      // Number of pool_lap performed.
-    DurationIntra  ActivityType = "duration"      // Duration of the activity (in seconds).
-    HRintra        ActivityType = "heart_rate"    // Measured heart rate.
-	spo2_autoIntra ActivityType = "spo2_auto"     // SpO2 measurement automatically tracked by a device tracker
+	StepsIntra     ActivityType = "steps"      // Number of steps
+	ElevIntra      ActivityType = "elevation"  // Number of floors cliembed.
+	CaloriesIntra  ActivityType = "calories"   // Active calories burned (in Kcal).
+	DistanceIntra  ActivityType = "distance"   // Distance travelled (in meters).
+	StrokeIntra    ActivityType = "stroke"     // Number of strokes performed.
+	PoolLapIntra   ActivityType = "pool_lap"   // Number of pool_lap performed.
+	DurationIntra  ActivityType = "duration"   // Duration of the activity (in seconds).
+	HRintra        ActivityType = "heart_rate" // Measured heart rate.
+	spo2_autoIntra ActivityType = "spo2_auto"  // SpO2 measurement automatically tracked by a device tracker
 )
 
 // ActivityType is activity type
@@ -115,7 +115,7 @@ const (
 	Intense       ActivityType = "intense"       // Duration of intense activities (in seconds).
 	Active        ActivityType = "active"        // Sum of intense and moderate activity durations (in seconds).
 	Calories      ActivityType = "calories"      // Active calories burned (in Kcal).
-	TotalCalories ActivityType = "totalcalories" // Total sum of daily calories Basel 
+	TotalCalories ActivityType = "totalcalories" // Total sum of daily calories Basel
 	HrAverage     ActivityType = "hr_average"    // Average heart rate.
 	HrMin         ActivityType = "hr_min"        // Minimal heart rate.
 	HrMax         ActivityType = "hr_max"        // Maximal heart rate.
@@ -125,14 +125,13 @@ const (
 	HrZone3       ActivityType = "hr_zone_3"     // Duration in seconds when heart rate was in maximal zone.
 )
 
-
 // WorkoutType is workout type
 type WorkoutType string
 
 // Workout Type
 const (
 	WTCalories          WorkoutType = "calories"            // Active calories burned (in Kcal).
-//	WTEffduration       WorkoutType = "effduration"         // Effective duration.
+	WTEffduration       WorkoutType = "effduration"         // Effective duration.
 	WTIntensity         WorkoutType = "intensity"           // Intensity.
 	WTManualDistance    WorkoutType = "manual_distance"     // Distance travelled manually entered by user (in meters).
 	WTManualCalories    WorkoutType = "manual_calories"     // Active calories burned manually entered by user (in Kcal).
@@ -227,35 +226,35 @@ type SleepSummariesType string
 
 // Sleep Summaries Types.
 const (
-	nb_rem    SleepSummariesType = "nb_rem_episodes" 		// Count of the REM sleep phases.
-	sleep_eff SleepSummariesType = "sleep_efficiency"  	// Ratio of the total sleep time over the time spent in bed.
-	sleep_lat SleepSummariesType = "sleep_latency"        // Time spent in bed before falling asleep.
-	total_sl  SleepSummariesType = "total_sleep_time"     // Total time spent asleep. Sum of light, deep and rem durations.
-	total_t   SleepSummariesType = "total_timeinbed"      // Total time spent in bed.
-	wk_up_lat SleepSummariesType = "wakeup_latency"       // Time spent in bed after waking up.
-	waso   	  SleepSummariesType = "waso"                 // Time spent awake in bed after falling asleep for the 1st time during the night.
-	SSBdi   SleepSummariesType = "breathing_disturbances_intensity" // Intensity of breathing disturbances
-	SSDasl  SleepSummariesType = "asleepduration"  					// Duration of sleep when night comes from external source (light, deep and rem sleep durations are null in this case).
-	SSDsd   SleepSummariesType = "deepsleepduration"                // Duration in state deep sleep (in seconds).
-	SSDsli  SleepSummariesType = "lightsleepduration"               // Duration in state light sleep (in seconds).
-	SSRsdur SleepSummariesType = "remsleepduration"                 // Duration in state REM sleep (in seconds).
-	SSD2s   SleepSummariesType = "durationtosleep"                  // Time to sleep (in seconds).
-	SSD2w   SleepSummariesType = "durationtowakeup"                 // Time to wake up (in seconds).
-	SSHrAvr SleepSummariesType = "hr_average"                       // Average heart rate.
-	SSHrMax SleepSummariesType = "hr_max"                           // Maximal heart rate.
-	SSHrMin SleepSummariesType = "hr_min"                           // Minimal heart rate.
-	SSDmvyn SleepSummariesType = "mvt_active_duration"              // Track the duration of movement in bed. EU only 
-	SSAvgmv SleepSummariesType = "mvt_score_avg"               		// Movement average for the full sleep duration.  EU only 
-	SSLnev  SleepSummariesType = "night_events"                     // Summary of sleep events that happened during the sleep activity. [cat see api doc]
-	SSSob   SleepSummariesType = "out_of_bed_count"                 // Number of times the user got out of bed during the night.
-	SSRRAvr SleepSummariesType = "rr_average"                       // Average respiration rate.
-	SSRRMax SleepSummariesType = "rr_max"                           // Maximal respiration rate.
-	SSRRMin SleepSummariesType = "rr_min"                           // Minimal respiration rate.
-	SSSS    SleepSummariesType = "sleep_score"                      // Sleep score
-	SSSng   SleepSummariesType = "snoring"                          // Total snoring time
-	SSSngEC SleepSummariesType = "snoringepisodecount"              // Numbers of snoring episodes of at least one minute
-	SSWupC  SleepSummariesType = "wakeupcount"                      // Number of times the user woke up.
-	SSWupD  SleepSummariesType = "wakeupduration"                   // Time spent awake (in seconds).
+	nb_rem    SleepSummariesType = "nb_rem_episodes"                  // Count of the REM sleep phases.
+	sleep_eff SleepSummariesType = "sleep_efficiency"                 // Ratio of the total sleep time over the time spent in bed.
+	sleep_lat SleepSummariesType = "sleep_latency"                    // Time spent in bed before falling asleep.
+	total_sl  SleepSummariesType = "total_sleep_time"                 // Total time spent asleep. Sum of light, deep and rem durations.
+	total_t   SleepSummariesType = "total_timeinbed"                  // Total time spent in bed.
+	wk_up_lat SleepSummariesType = "wakeup_latency"                   // Time spent in bed after waking up.
+	waso      SleepSummariesType = "waso"                             // Time spent awake in bed after falling asleep for the 1st time during the night.
+	SSBdi     SleepSummariesType = "breathing_disturbances_intensity" // Intensity of breathing disturbances
+	SSDasl    SleepSummariesType = "asleepduration"                   // Duration of sleep when night comes from external source (light, deep and rem sleep durations are null in this case).
+	SSDsd     SleepSummariesType = "deepsleepduration"                // Duration in state deep sleep (in seconds).
+	SSDsli    SleepSummariesType = "lightsleepduration"               // Duration in state light sleep (in seconds).
+	SSRsdur   SleepSummariesType = "remsleepduration"                 // Duration in state REM sleep (in seconds).
+	SSD2s     SleepSummariesType = "durationtosleep"                  // Time to sleep (in seconds).
+	SSD2w     SleepSummariesType = "durationtowakeup"                 // Time to wake up (in seconds).
+	SSHrAvr   SleepSummariesType = "hr_average"                       // Average heart rate.
+	SSHrMax   SleepSummariesType = "hr_max"                           // Maximal heart rate.
+	SSHrMin   SleepSummariesType = "hr_min"                           // Minimal heart rate.
+	SSDmvyn   SleepSummariesType = "mvt_active_duration"              // Track the duration of movement in bed. EU only
+	SSAvgmv   SleepSummariesType = "mvt_score_avg"                    // Movement average for the full sleep duration.  EU only
+	SSLnev    SleepSummariesType = "night_events"                     // Summary of sleep events that happened during the sleep activity. [cat see api doc]
+	SSSob     SleepSummariesType = "out_of_bed_count"                 // Number of times the user got out of bed during the night.
+	SSRRAvr   SleepSummariesType = "rr_average"                       // Average respiration rate.
+	SSRRMax   SleepSummariesType = "rr_max"                           // Maximal respiration rate.
+	SSRRMin   SleepSummariesType = "rr_min"                           // Minimal respiration rate.
+	SSSS      SleepSummariesType = "sleep_score"                      // Sleep score
+	SSSng     SleepSummariesType = "snoring"                          // Total snoring time
+	SSSngEC   SleepSummariesType = "snoringepisodecount"              // Numbers of snoring episodes of at least one minute
+	SSWupC    SleepSummariesType = "wakeupcount"                      // Number of times the user woke up.
+	SSWupD    SleepSummariesType = "wakeupduration"                   // Time spent awake (in seconds).
 )
 
 // SleepState is Sleep state

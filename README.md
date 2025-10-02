@@ -3,8 +3,6 @@
 I kept alive this withings-go UNOFFICIAL go client to acess Withings API easily.
 More Withings API document can be found in [Withings developer documentation](https://developer.withings.com/oauth2/#).
 
-Also withings-go document can be found in [withings · pkg.go.dev](https://pkg.go.dev/github.com/zono-dev/withings-go/withings)
-
 
 ## Supported Resources
 
@@ -21,7 +19,7 @@ This library requires Go 1.15 or later.
 
 ## Installation
 
-`go get github.com/zono-dev/withings-go/withings`
+`go get github.com/tgrangeray/withings-go/withings`
 
 ## Getting started
 
