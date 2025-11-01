@@ -84,7 +84,7 @@ func tokenFuncs() {
 }
 
 func mainSetup() {
-	jst = time.FixedZone("Asis/Tokyo", 9*60*60)
+	jst = time.Local
 	t = time.Now()
 	// to get sample data from 2 days ago to now
 	adayago = t.Add(-48 * time.Hour)
