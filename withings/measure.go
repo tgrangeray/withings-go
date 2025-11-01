@@ -59,6 +59,14 @@ func reqAndParse(c *Client, fp []FormParam, url, method string, result interface
 	ctx, cancel := getNewContext(c.Timeout)
 	defer cancel()
 
+	// TODO : Remove debug prints
+	fmt.Print("Request URL:", url, "\n")
+	fmt.Print("Form Parameters:\n")
+	for _, v := range fp {
+		fmt.Printf("  %s: %s\n", v.key, v.value)
+	}
+	fmt.Print("\n")
+
 	req, err := createRequest(ctx, fp, url, method)
 	if err != nil {
 		return err
@@ -104,7 +112,9 @@ func createDataFields(fields interface{}) (string, error) {
 // cattype: category, 1 for real measures, 2 for user objectives
 // startdate, enddate: Measure's start date, end date.
 // lastupdate : Timestamp for requesting data that were updated or created after this date. Use this instead of startdate+endate.
-//              If lastupdate is set to a timestamp other than Offsetbase, getMeas will use lastupdate in preference to startdate/enddate.
+//
+//	If lastupdate is set to a timestamp other than Offsetbase, getMeas will use lastupdate in preference to startdate/enddate.
+//
 // offset: When a first call retuns more:1 and offset:XX, set value XX in this parameter to retrieve next available rows.
 // isOldToNew: If true, results must be sorted by oldest to newest. If false, results must be sorted by newest to oldest.
 // isSerialized: if true, results must be parsed to Measurement.SerializedData
@@ -122,9 +132,16 @@ func (c *Client) GetMeas(cattype CatType, startdate, enddate, lastupdate time.Ti
 		return nil, err
 	}
 
+	var measTypeParam string
+	if len(mtype) > 1 {
+		measTypeParam = PPmeastypes
+	} else {
+		measTypeParam = PPmeastype
+	}
+
 	fp := []FormParam{
 		{PPaction, MeasureA},
-		{PPmeastype, df},
+		{measTypeParam, df},
 		{PPcategory, fmt.Sprintf("%d", cattype)},
 	}
 
@@ -165,6 +182,7 @@ func (c *Client) GetMeas(cattype CatType, startdate, enddate, lastupdate time.Ti
 			return mym, err
 		}
 	}
+
 	return mym, nil
 }
 
@@ -252,11 +270,12 @@ func SerialMeas(mym *Measurement) (*SerialzedMeas, error) {
 	return sm, nil
 }
 
-
 // GetActivity call withings API Measure v2 - Getactivity. (https://developer.withings.com/oauth2/#operation/measurev2-getactivity)
 // startdate/enddate: Activity result start date, end date.
 // lastupdate : Timestamp for requesting data that were updated or created after this date. Use this instead of startdate+endate.
-//              If lastupdate is set to a timestamp other than Offsetbase, getMeas will use lastupdate in preference to startdate/enddate.
+//
+//	If lastupdate is set to a timestamp other than Offsetbase, getMeas will use lastupdate in preference to startdate/enddate.
+//
 // offset: When a first call retuns more:1 and offset:XX, set value XX in this parameter to retrieve next available rows.
 // atype: Acitivity Type. Set the activity type you want to get data. See ActivityType in enum.go.
 func (c *Client) GetActivity(startdate, enddate string, lastupdate int, offset int, atype ...ActivityType) (*Activities, error) {
@@ -289,7 +308,9 @@ func (c *Client) GetActivity(startdate, enddate string, lastupdate int, offset i
 // GetWorkouts call withings API Measure v2 - Getworkouts. (https://developer.withings.com/api-reference#operation/measurev2-getworkouts)
 // startdate/enddate: Workouts result start date, end date.
 // lastupdate : Timestamp for requesting data that were updated or created after this date. Use this instead of startdate+endate.
-//              If lastupdate is set to a timestamp other than Offsetbase, GetWorkouts will use lastupdate in preference to startdate/enddate.
+//
+//	If lastupdate is set to a timestamp other than Offsetbase, GetWorkouts will use lastupdate in preference to startdate/enddate.
+//
 // offset: When a first call retuns more:1 and offset:XX, set value XX in this parameter to retrieve next available rows.
 // wtype: Workout Type. Set the workout type you want to get data. See WorkoutType in enum.go.
 func (c *Client) GetWorkouts(startdate, enddate string, lastupdate int, offset int, wtype ...WorkoutType) (*Workouts, error) {
@@ -355,7 +376,9 @@ func (c *Client) GetSleep(startdate, enddate time.Time, stype ...SleepType) (*Sl
 // GetSleepSummary call withings API Sleep v2 - Getsummary. (https://developer.withings.com/oauth2/#operation/sleepv2-getsummary)
 // startdate/enddate: Measurement result start date, end date.
 // lastupdate : Timestamp for requesting data that were updated or created after this date. Use this instead of startdate+endate.
-//              If lastupdate is set to a timestamp other than Offsetbase, getMeas will use lastupdate in preference to startdate/enddate.
+//
+//	If lastupdate is set to a timestamp other than Offsetbase, getMeas will use lastupdate in preference to startdate/enddate.
+//
 // stype: Sleep Summaries Type. Set the sleep summaries data you want to get. See SleepSummariesType in enum.go.
 func (c *Client) GetSleepSummary(startdate, enddate string, lastupdate int, sstype ...SleepSummariesType) (*SleepSummaries, error) {
 	if len(sstype) == 0 {

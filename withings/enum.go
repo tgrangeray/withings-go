@@ -18,6 +18,7 @@ const (
 const (
 	PPaction       string = "action"
 	PPmeastype     string = "meastype"
+	PPmeastypes    string = "meastypes"
 	PPcategory     string = "category"
 	PPstartdate    string = "startdate"
 	PPenddate      string = "enddate"
