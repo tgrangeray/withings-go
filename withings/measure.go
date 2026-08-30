@@ -39,11 +39,13 @@ func createRequest(ctx context.Context, fp []FormParam, uri, method string) (*ht
 		return nil, err
 	}
 
-	req, err := http.NewRequest(method, u.String(), body)
-	req = req.WithContext(ctx)
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), body)
 	if err != nil {
 		return nil, err
 	}
+	// The withings API expects form-encoded parameters. Without this header a
+	// conforming server cannot parse the body at all.
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	return req, nil
 }
