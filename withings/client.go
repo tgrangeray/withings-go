@@ -1,7 +1,6 @@
 // license that can be found in the LICENSE file.
 
 // Package withings is UNOFFICIAL sdk of withings API for Go client.
-//
 package withings
 
 import (
@@ -375,28 +374,31 @@ func interceptRequest(req *http.Request) error {
 // withings's response body is nested.
 // example)
 // from:
-//     {
-//       "status": 0,
-//       "body": {
-//         "userid": "363",
-//         "access_token": "a075f8c14fb8df40b08ebc8508533dc332a6910a",
-//         "refresh_token": "f631236f02b991810feb774765b6ae8e6c6839ca",
-//         "expires_in": 10800,
-//         "scope": "user.info,user.metrics",
-//         "csrf_token": "PACnnxwHTaBQOzF7bQqwFUUotIuvtzSM",
-//         "token_type": "Bearer"
-//       }
-//     }
+//
+//	{
+//	  "status": 0,
+//	  "body": {
+//	    "userid": "363",
+//	    "access_token": "a075f8c14fb8df40b08ebc8508533dc332a6910a",
+//	    "refresh_token": "f631236f02b991810feb774765b6ae8e6c6839ca",
+//	    "expires_in": 10800,
+//	    "scope": "user.info,user.metrics",
+//	    "csrf_token": "PACnnxwHTaBQOzF7bQqwFUUotIuvtzSM",
+//	    "token_type": "Bearer"
+//	  }
+//	}
+//
 // to:
-//     {
-//       "userid": "363",
-//       "access_token": "a075f8c14fb8df40b08ebc8508533dc332a6910a",
-//       "refresh_token": "f631236f02b991810feb774765b6ae8e6c6839ca",
-//       "expires_in": 10800,
-//       "scope": "user.info,user.metrics",
-//       "csrf_token": "PACnnxwHTaBQOzF7bQqwFUUotIuvtzSM",
-//       "token_type": "Bearer"
-//     }
+//
+//	{
+//	  "userid": "363",
+//	  "access_token": "a075f8c14fb8df40b08ebc8508533dc332a6910a",
+//	  "refresh_token": "f631236f02b991810feb774765b6ae8e6c6839ca",
+//	  "expires_in": 10800,
+//	  "scope": "user.info,user.metrics",
+//	  "csrf_token": "PACnnxwHTaBQOzF7bQqwFUUotIuvtzSM",
+//	  "token_type": "Bearer"
+//	}
 func interceptResponse(res *http.Response) error {
 	body, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()

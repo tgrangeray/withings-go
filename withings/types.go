@@ -31,19 +31,19 @@ type SerialzedMeas struct {
 	BoneMasses     []MeasureData
 	PWaveVel       []MeasureData
 	VO2s           []MeasureData
-	QRS_ECG  	   []MeasureData
-	PR__ECG  	   []MeasureData
-	QT__ECG  	   []MeasureData
-	CorQT_ECG  	   []MeasureData
-	AtrFibPPG  	   []MeasureData
-	VasAge  	   []MeasureData
-	NervHea  	   []MeasureData
-	ExtrH2o  	   []MeasureData
-	IntrH2o  	   []MeasureData
-	VisFat  	   []MeasureData
+	QRS_ECG        []MeasureData
+	PR__ECG        []MeasureData
+	QT__ECG        []MeasureData
+	CorQT_ECG      []MeasureData
+	AtrFibPPG      []MeasureData
+	VasAge         []MeasureData
+	NervHea        []MeasureData
+	ExtrH2o        []MeasureData
+	IntrH2o        []MeasureData
+	VisFat         []MeasureData
 	FatMassSeg     []MeasureData
 	MusMassSeg     []MeasureData
-	EDAfeet  	   []MeasureData
+	EDAfeet        []MeasureData
 	UnknowVals     []MeasureData
 }
 
