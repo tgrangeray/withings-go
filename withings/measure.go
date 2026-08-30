@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log/slog"
 	"math"
 	"net/http"
 	"net/url"
@@ -59,13 +60,15 @@ func reqAndParse(c *Client, fp []FormParam, url, method string, result interface
 	ctx, cancel := getNewContext(c.Timeout)
 	defer cancel()
 
-	// TODO : Remove debug prints
-	fmt.Print("Request URL:", url, "\n")
-	fmt.Print("Form Parameters:\n")
-	for _, v := range fp {
-		fmt.Printf("  %s: %s\n", v.key, v.value)
+	if c.log().Enabled(ctx, slog.LevelDebug) {
+		params := make([]any, 0, len(fp)*2)
+		for _, v := range fp {
+			params = append(params, v.key, v.value)
+		}
+		c.log().DebugContext(ctx, "withings api request",
+			"url", url, "method", method,
+			slog.Group("params", params...))
 	}
-	fmt.Print("\n")
 
 	req, err := createRequest(ctx, fp, url, method)
 	if err != nil {
