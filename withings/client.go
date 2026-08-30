@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log/slog"
 	"net/http"
@@ -75,17 +76,27 @@ func WithTimeout(timeout time.Duration) ClientOption {
 	}
 }
 
-// AuthorizeOffline provides oauth2 authorization for withings in CLI.
+// AuthorizeOffline provides oauth2 authorization for withings in CLI, prompting
+// on os.Stdout and reading the grant code from os.Stdin.
 // See example/main.go to know the detail.
 func AuthorizeOffline(conf *oauth2.Config) (*oauth2.Token, error) {
+	return AuthorizeOfflineWith(conf, os.Stdin, os.Stdout)
+}
+
+// AuthorizeOfflineWith performs the offline authorization flow, writing the prompt
+// to out and reading the grant code from in. This is interaction, not logging: it
+// lets callers drive the flow from streams other than the process standard ones.
+func AuthorizeOfflineWith(conf *oauth2.Config, in io.Reader, out io.Writer) (*oauth2.Token, error) {
 
 	url := conf.AuthCodeURL("state", oauth2.AccessTypeOffline)
 
-	fmt.Printf("URL to authorize:%s\n", url)
+	fmt.Fprintf(out, "URL to authorize:%s\n", url)
 
 	var grantcode string
-	fmt.Printf("Open url your browser and Enter your grant code here.\n Grant Code:")
-	fmt.Scan(&grantcode)
+	fmt.Fprintf(out, "Open url your browser and Enter your grant code here.\n Grant Code:")
+	if _, err := fmt.Fscan(in, &grantcode); err != nil {
+		return nil, fmt.Errorf("cannot read grant code: %w", err)
+	}
 
 	token, err := conf.Exchange(newOauthContext(), grantcode)
 	if err != nil {
@@ -153,9 +164,14 @@ func (c *Client) SetTimeout(timeout time.Duration) {
 	c.Timeout = timeout * time.Second
 }
 
-// PrintTimeout print timeout setting.
+// PrintTimeout prints the timeout setting on os.Stdout.
 func (c *Client) PrintTimeout() {
-	fmt.Printf("Timeout=%v\n", c.Timeout)
+	c.FprintTimeout(os.Stdout)
+}
+
+// FprintTimeout writes the timeout setting to w.
+func (c *Client) FprintTimeout(w io.Writer) {
+	fmt.Fprintf(w, "Timeout=%v\n", c.Timeout)
 }
 
 // ReadToken read from a file and that token is set to client.
@@ -255,48 +271,61 @@ func GetClient(conf *oauth2.Config, token *oauth2.Token) *http.Client {
 	return client
 }
 
-// PrintToken print token information.
+// PrintToken prints token information on os.Stdout.
+// The token is a credential: prefer FprintToken to control where it lands.
 func (c *Client) PrintToken() {
-	printToken(c.Token)
+	c.FprintToken(os.Stdout)
 }
 
-func printToken(t *oauth2.Token) {
+// FprintToken writes token information to w.
+func (c *Client) FprintToken(w io.Writer) {
+	printToken(w, c.Token)
+}
+
+func printToken(w io.Writer, t *oauth2.Token) {
 	layout := "2006-01-02 15:04:05"
 	extraKeys := []string{"access_token", "expires_in", "refresh_token", "scope", "token_type", "userid"}
 
-	fmt.Printf("--Token Information--\n")
-	fmt.Printf("AccessToken:%s\n", t.AccessToken)
-	fmt.Printf("RefreshToken:%s\n", t.RefreshToken)
-	fmt.Printf("ExpiryDate:%s\n", t.Expiry.Format(layout))
-	fmt.Printf("TokenType:%s\n", t.TokenType)
+	fmt.Fprintf(w, "--Token Information--\n")
+	fmt.Fprintf(w, "AccessToken:%s\n", t.AccessToken)
+	fmt.Fprintf(w, "RefreshToken:%s\n", t.RefreshToken)
+	fmt.Fprintf(w, "ExpiryDate:%s\n", t.Expiry.Format(layout))
+	fmt.Fprintf(w, "TokenType:%s\n", t.TokenType)
 
 	// Extra returns interface{}
 	for _, k := range extraKeys {
 		switch val := t.Extra(k).(type) {
 		case string:
-			fmt.Printf("%s:%s\n", k, val)
+			fmt.Fprintf(w, "%s:%s\n", k, val)
 		case float64:
-			fmt.Printf("%s:%g\n", k, val)
+			fmt.Fprintf(w, "%s:%g\n", k, val)
 		default:
 			if val != nil {
-				fmt.Println(val)
+				fmt.Fprintln(w, val)
 			}
 		}
 	}
 }
 
-// PrintConf print conf information.
+// PrintConf prints conf information on os.Stdout.
+// The configuration carries the client secret: prefer FprintConf to control
+// where it lands.
 func (c *Client) PrintConf() {
-	printConf(c.Conf)
+	c.FprintConf(os.Stdout)
 }
 
-func printConf(conf *oauth2.Config) {
-	fmt.Printf("RedirectURL: %v\n", conf.RedirectURL)
-	fmt.Printf("ClientID: %v\n", conf.ClientID)
-	fmt.Printf("ClientSecret: %v\n", conf.ClientSecret)
-	fmt.Printf("Scopes: %v\n", conf.Scopes)
-	fmt.Printf("Endpoint(AuthURL): %v\n", conf.Endpoint.AuthURL)
-	fmt.Printf("Endpoint(TokenURL): %v\n", conf.Endpoint.TokenURL)
+// FprintConf writes conf information to w.
+func (c *Client) FprintConf(w io.Writer) {
+	printConf(w, c.Conf)
+}
+
+func printConf(w io.Writer, conf *oauth2.Config) {
+	fmt.Fprintf(w, "RedirectURL: %v\n", conf.RedirectURL)
+	fmt.Fprintf(w, "ClientID: %v\n", conf.ClientID)
+	fmt.Fprintf(w, "ClientSecret: %v\n", conf.ClientSecret)
+	fmt.Fprintf(w, "Scopes: %v\n", conf.Scopes)
+	fmt.Fprintf(w, "Endpoint(AuthURL): %v\n", conf.Endpoint.AuthURL)
+	fmt.Fprintf(w, "Endpoint(TokenURL): %v\n", conf.Endpoint.TokenURL)
 }
 
 // newOauthContext returns context.Context with
