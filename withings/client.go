@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -35,6 +36,26 @@ type Client struct {
 	MeasureURL   string
 	MeasureURLv2 string
 	SleepURLv2   string
+
+	// logger receives the library's diagnostic output. It is nil-safe: use log().
+	logger *slog.Logger
+}
+
+// log returns the configured logger, or a discarding one when the Client was
+// built without New. A library must stay silent unless the caller asks for output.
+func (c *Client) log() *slog.Logger {
+	if c.logger == nil {
+		return slog.New(slog.DiscardHandler)
+	}
+	return c.logger
+}
+
+// WithLogger makes the client report its diagnostics to l.
+func WithLogger(l *slog.Logger) ClientOption {
+	return func(c *Client) error {
+		c.logger = l
+		return nil
+	}
 }
 
 // ClientOption customizes the Client at construction time.
@@ -109,6 +130,7 @@ func New(cid, secret, redirectURL string, options ...ClientOption) (*Client, err
 	c.Token = &oauth2.Token{}
 	c.Client = GetClient(c.Conf, c.Token)
 	c.Timeout = 5 * time.Second
+	c.logger = slog.New(slog.DiscardHandler)
 	c.MeasureURL = defaultMeasureURL
 	c.MeasureURLv2 = defaultMeasureURLv2
 	c.SleepURLv2 = defaultSleepURLv2
