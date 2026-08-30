@@ -155,7 +155,7 @@ func testGetactivity() {
 
 	//fmt.Println(act)
 	for _, v := range act.Body.Activities {
-		fmt.Printf("Date:%s, Steps:%d, BurnedCalories: %g, HRAverage: %d, HRMinimum: %d, HRMax:%d \n", v.Date, v.Steps, v.Calories, v.HrAverage, v.HrMin, v.HrMax)
+		fmt.Printf("Date:%s, Steps:%d, BurnedCalories: %g, HRAverage: %g, HRMinimum: %d, HRMax:%d \n", v.Date, v.Steps, v.Calories, v.HrAverage, v.HrMin, v.HrMax)
 	}
 	fmt.Println("========== Getactivity[END] ========== ")
 }
@@ -207,7 +207,7 @@ func testGetsleep() {
 		stime := (stimeUnix.In(jst)).Format(layout2)
 		etime := (etimeUnix.In(jst)).Format(layout2)
 		message := fmt.Sprintf("%s to %s: %s, Hr:%d, Rr:%d, Snoring:%d\n", stime, etime, st, v.Hr, v.Rr, v.Snoring)
-		fmt.Printf(message)
+		fmt.Print(message)
 	}
 	//fmt.Println(slp)
 	fmt.Println("========== Getsleep[END] ========== ")
@@ -242,7 +242,12 @@ func testGetsleepsummary() {
 
 func main() {
 
-	settings = withings.ReadSettings(".test_settings.yaml")
+	var err error
+	settings, err = withings.ReadSettings(".test_settings.yaml")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	auth(settings)
 	tokenFuncs()

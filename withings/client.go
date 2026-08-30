@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -90,18 +89,17 @@ func AuthorizeOffline(conf *oauth2.Config) (*oauth2.Token, error) {
 
 	token, err := conf.Exchange(newOauthContext(), grantcode)
 	if err != nil {
-		fmt.Println("Failed to oauth2 exchange.")
-		return nil, err
+		return nil, fmt.Errorf("oauth2 exchange failed: %w", err)
 	}
 
 	return token, nil
 }
 
-// ReadSettings read setting file which is yaml file and returns the settings.
-func ReadSettings(path2settings string) map[string]string {
+// ReadSettings reads the yaml settings file at path2settings and returns the settings.
+func ReadSettings(path2settings string) (map[string]string, error) {
 	f, err := os.Open(path2settings)
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("cannot open settings file %q: %w", path2settings, err)
 	}
 	defer f.Close()
 
@@ -109,10 +107,10 @@ func ReadSettings(path2settings string) map[string]string {
 	var m map[string]string
 
 	if err := d.Decode(&m); err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("cannot decode settings file %q: %w", path2settings, err)
 	}
 
-	return m
+	return m, nil
 }
 
 // getNewContext returns new context that has Timeout settings.

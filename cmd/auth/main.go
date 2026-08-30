@@ -78,7 +78,12 @@ func tokenFuncs() {
 }
 
 func main() {
-	settings = withings.ReadSettings(".test_settings.yaml")
+	var err error
+	settings, err = withings.ReadSettings(".test_settings.yaml")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 	fmt.Println(settings)
 	auth()
 	tokenFuncs()
