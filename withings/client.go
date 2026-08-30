@@ -37,8 +37,23 @@ type Client struct {
 	SleepURLv2   string
 }
 
-// ClientOption type for to customize http.Client
-type ClientOption func(*http.Client) error
+// ClientOption customizes the Client at construction time.
+type ClientOption func(*Client) error
+
+// WithHTTPClient customizes the underlying http.Client.
+func WithHTTPClient(fn func(*http.Client) error) ClientOption {
+	return func(c *Client) error {
+		return fn(c.Client)
+	}
+}
+
+// WithTimeout sets the timeout applied to API requests.
+func WithTimeout(timeout time.Duration) ClientOption {
+	return func(c *Client) error {
+		c.Timeout = timeout
+		return nil
+	}
+}
 
 // AuthorizeOffline provides oauth2 authorization for withings in CLI.
 // See example/main.go to know the detail.
@@ -99,7 +114,7 @@ func New(cid, secret, redirectURL string, options ...ClientOption) (*Client, err
 	c.SleepURLv2 = defaultSleepURLv2
 
 	for _, option := range options {
-		err := option(c.Client)
+		err := option(c)
 		if err != nil {
 			return nil, err
 		}
